@@ -1,0 +1,103 @@
+<?php
+    $flag=0;
+
+    if($_SERVER["REQUEST_METHOD"]=="POST")
+    {
+        $username=$_POST['username'];
+        $pass=md5($_POST['pass']);
+
+        if(!empty($_POST['saveme']))
+        {
+            $saveme=$_POST['saveme'];
+        }
+
+        $sql="SELECT * from register Where username='$username' AND pass='$pass'";
+
+        $result = $conn->query($sql);
+
+        if($result -> num_rows>0)
+        {
+            while($row=$result->fetch_assoc())
+            {
+                $_SESSION['auth']=$row;
+
+                if(!empty($_POST['saveme']))
+                {
+                    setcookie("data",$row['email'],time()+86400);
+                    // formate is setcookie(data_variable,data_value,expiry time in second)
+                }
+                header("Location:dashboard.php");
+            }
+        }
+        else
+        {
+            $flag=1;
+        }
+
+        
+    }
+    
+
+?>
+        <?php 
+            if($flag==1)
+            {
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        User is not registered With us
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
+
+            }
+        ?>
+  <div class="card bg-light ">
+            <div class="card-body">
+                <form action="<?php $_SERVER["PHP_SELF"];?>" method="POST">
+                <h5 class="h5 text-center text-primary ">Welcome to Login</h5>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label"><p style="color: black;">username</p></label>
+                    <input type="text" name="username" class="form-control" id="exampleFormControlInput1" placeholder="xyz" required>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label"><p style="color: black;">Password</p></label>
+                    <input type="password" name="pass" class="form-control" id="exampleFormControlInput1" placeholder="Password" required>
+                </div>
+                <div class="form-check mb-1">
+                    <input role="button" class="form-check-input" type="checkbox" name="saveme" value="saveme" id="gridCheck">
+                    <label class="form-check-label" for="gridCheck">
+                    <p style="color: black;">Remember Me</p>
+                    </label>
+                </div>
+                <div class="mb-1">
+                    <button name="submit" type="submit" class="btn btn-outline-primary">Login</button>
+                    <p style="color: black;"> Not have any account  ? then click </p> <a href="sign-up.php"> Registration Here </a>
+                </div>
+                </form>
+            </div>
+        </div>
+
+bootstarp
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+
+
+
+
+        <main>
+    <div class="profile-card">
+        <div class="card-header">
+            <div class="pic">
+                 <img src="img/code.png" alt="">
+            </div>
+            <div class="name">John Doe</div>
+            <div class="desc">Developer & Designer</div>
+            <div class="sm">
+                <a href="#" class="fab fa-facebook-f"></a>
+                <a href="#" class="fab fa-twitter"></a>
+                <a href="#" class="fab fa-github"></a>
+                <a href="#" class="fab fa-youtube"></a>
+            </div>
+                <a href="#" class="contact-btn">Contact Me</a>
+        </div>
+    </div> 
+    <br>
+    
+</main>
